@@ -44,3 +44,6 @@ Thumbs.db
 
 # ffmpeg.wasm assets are generated from node_modules on (post)install / prebuild
 /public/ffmpeg/
+
+# Firebase deploy cache
+.firebase/

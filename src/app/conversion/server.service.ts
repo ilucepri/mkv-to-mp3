@@ -18,8 +18,15 @@ export class ServerConvertService {
 
   async checkAvailability(): Promise<boolean> {
     try {
-      const res = await fetch(apiUrl('api/health'), { method: 'GET' });
-      const ok = res.ok;
+      const res = await fetch(apiUrl('api/health'), {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+      });
+      // Must be our API responding with JSON {ok:true}. On static-only hosting
+      // (e.g. Firebase) a SPA rewrite answers /api/health with index.html and
+      // HTTP 200 — res.json() then throws and we correctly report no server.
+      const data = res.ok ? await res.json() : null;
+      const ok = data?.ok === true;
       this.available.set(ok);
       return ok;
     } catch {
